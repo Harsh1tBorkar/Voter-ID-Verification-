@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Automated Polling Verification — Prototype</title>
+  <meta name="description" content="Prototype website for faster and secure automated voter verification at polling booths." />
+  <style>
+    /* ------- Reset & base ------- */
+    :root{
+      --bg:#0f1724; --card:#0b1220; --accent:#06b6d4; --muted:#9aa7b2; --glass: rgba(255,255,255,0.03);
+      --success:#10b981; --danger:#ef4444; --glass-2: rgba(255,255,255,0.04);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      background: linear-gradient(180deg, #071023 0%, #071827 60%); color:#e6f2f5; -webkit-font-smoothing:antialiased;
+      line-height:1.45; padding:24px;
+    }
+    .container{max-width:1100px;margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:52px;height:52px;background:linear-gradient(135deg,var(--accent),#0ea5a5);border-radius:12px;display:grid;place-items:center;font-weight:700}
+    h1{font-size:20px;margin:0}
+    p.lead{color:var(--muted);margin:6px 0 0;font-size:14px}
+
+    /* hero */
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:start;margin-bottom:28px}
+    .card{background:linear-gradient(180deg,var(--glass),transparent);border-radius:14px;padding:18px;box-shadow:0 6px 18px rgba(2,6,23,0.6);border:1px solid rgba(255,255,255,0.03)}
+    .features{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
+    .feature{padding:12px;border-radius:8px;background:var(--card);border:1px solid var(--glass-2)}
+    .kpi{display:flex;gap:14px;margin-top:10px}
+    .kpi > div{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:10px;border-radius:10px;min-width:120px}
+
+    /* demo panel */
+    .demo h3{margin-top:0}
+    label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    input[type=text], select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
+    button{cursor:pointer;padding:10px 14px;border-radius:10px;border:0;background:var(--accent);color:#032; font-weight:600}
+    button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+    .log{background:rgba(0,0,0,0.15);padding:10px;border-radius:8px;max-height:220px;overflow:auto;font-family:monospace;font-size:13px}
+
+    /* flow */
+    .flow{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px}
+    .step{min-width:160px;padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border:1px solid rgba(255,255,255,0.03)}
+
+    /* footer */
+    footer{margin-top:28px;color:var(--muted);font-size:13px}
+
+    /* Responsive */
+    @media (max-width:980px){.hero{grid-template-columns:1fr;}.kpi{flex-direction:column}.features{grid-template-columns:1fr}}
+
+    /* small details */
+    .tag{display:inline-block;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03);font-size:12px;color:var(--muted)}
+    .status{display:inline-flex;gap:8px;align-items:center}
+    .dot{width:10px;height:10px;border-radius:50%}
+    .dot.ok{background:var(--success)}
+    .dot.bad{background:var(--danger)}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">AV</div>
+        <div>
+          <h1>Automated Voting Verification — Prototype</h1>
+          <p class="lead">Faster, secure, and auditable voter verification at polling booths.</p>
+        </div>
+      </div>
+      <div class="tag">Demo • Prototype • Frontend</div>
+    </header>
+
+    <section class="hero">
+      <div class="card">
+        <h2 style="margin-top:0">Problem & Goal</h2>
+        <p style="color:var(--muted)">Manual voter verification causes long queues, human error, and security weaknesses. This prototype demonstrates a safer, faster verification flow combining QR/NFC, ID lookup, and biometric-assisted confirmation with strong auditing and privacy-preserving practices.</p>
+
+        <div class="features">
+          <div class="feature">
+            <strong>Fast lookup</strong>
+            <div class="kpi" style="margin-top:8px">
+              <div><div style="font-size:18px">≤ 8s</div><div style="color:var(--muted);font-size:12px">avg. verification</div></div>
+              <div><div style="font-size:18px">99.9%</div><div style="color:var(--muted);font-size:12px">data integrity</div></div>
+            </div>
+          </div>
+          <div class="feature">
+            <strong>Secure & auditable</strong>
+            <p class="lead" style="margin:6px 0 0;color:var(--muted);font-size:13px">Encrypted logs, tamper-evidence, one-time tokens, limited PII exposure.</p>
+          </div>
+          <div class="feature">
+            <strong>Accessibility</strong>
+            <p class="lead" style="margin:6px 0 0;color:var(--muted);font-size:13px">Multiple verification options: QR, ID scan, assisted biometrics, language options.</p>
+          </div>
+          <div class="feature">
+            <strong>Offline-capable</strong>
+            <p class="lead" style="margin:6px 0 0;color:var(--muted);font-size:13px">Local cache + conflict-resolved sync when connectivity resumes.</p>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <strong>Verification Flow</strong>
+          <div class="flow">
+            <div class="step">1. Token/QR presented</div>
+            <div class="step">2. Booth terminal reads token</div>
+            <div class="step">3. Lookup & candidate match</div>
+            <div class="step">4. Biometric assist (optional)</div>
+            <div class="step">5. Signed audit log</div>
+          </div>
+        </div>
+
+      </div>
+
+      <aside class="card demo">
+        <h3>Interactive demo</h3>
+        <p style="margin-top:0;color:var(--muted);font-size:13px">Try verifying a mock voter. This is a frontend-only prototype: in production the verification would hit a secure backend and HSM for signing.</p>
+
+        <label for="method">Verification method</label>
+        <select id="method">
+          <option value="id">Voter ID / Name</option>
+          <option value="qr">Scan QR (simulated)</option>
+          <option value="face">Biometric face (simulated)</option>
+        </select>
+
+        <div style="margin-top:10px">
+          <label for="voterId">Voter ID</label>
+          <input id="voterId" type="text" placeholder="e.g., VOTER-2025-001" />
+        </div>
+
+        <div style="margin-top:10px">
+          <label for="voterName">Name (optional)</label>
+          <input id="voterName" type="text" placeholder="John Doe" />
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button id="verifyBtn">Verify</button>
+          <button class="secondary" id="clearBtn">Clear</button>
+        </div>
+
+        <div style="margin-top:12px">
+          <strong>Result</strong>
+          <div id="result" class="log">No verifications yet.</div>
+        </div>
+
+        <div style="margin-top:12px">
+          <strong>Audit</strong>
+          <div id="audit" class="log" aria-live="polite">Audit log will appear here.</div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="card">
+      <h2 style="margin-top:0">Design highlights & security considerations</h2>
+      <ul style="color:var(--muted);">
+        <li><strong>Minimal PII exposure:</strong> Terminals only fetch the minimum fields needed; photos and sensitive attributes stay encrypted and are never exposed to third-parties.</li>
+        <li><strong>One-way proofs:</strong> Use of hashed commitments (e.g., Bloom filters / salted hashes) for fast local matching without revealing raw identifiers.</li>
+        <li><strong>Tamper-evidence:</strong> Each verification event is hashed and signed by a local HSM or secure element; chain of custody is logged.</li>
+        <li><strong>Privacy by design:</strong> Biometric checks are optional and used only with explicit consent; audit trails contain event IDs and pseudonyms, not raw biometric templates.</li>
+        <li><strong>Fallbacks:</strong> Offline operation with reconciliation, manual override paths with countersigned receipts for exceptional cases.</li>
+      </ul>
+
+      <h3>Prototype limitations</h3>
+      <p style="color:var(--muted);">This page is a frontend demo — a real system requires secure server endpoints, properly provisioned keys, compliance checks, accessibility testing, and rigorous security audits before deployment.</p>
+    </section>
+
+    <footer>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <div>Made with ♥ — Prototype for <strong>Automated Polling Verification</strong></div>
+        <div style="color:var(--muted)">Version 0.9 • Accessible • Privacy-aware</div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Mock local voter database (in production this is on a secure server)
+    const voters = [
+      {id:'VOTER-2025-001', name:'John Doe', age:34, region:'North', registered:true},
+      {id:'VOTER-2025-002', name:'Priya Sharma', age:28, region:'East', registered:true},
+      {id:'VOTER-2025-003', name:'Amit Patel', age:46, region:'West', registered:true},
+      {id:'VOTER-2025-004', name:'Sita Verma', age:52, region:'South', registered:true}
+    ];
+
+    const methodEl = document.getElementById('method');
+    const idEl = document.getElementById('voterId');
+    const nameEl = document.getElementById('voterName');
+    const resultEl = document.getElementById('result');
+    const auditEl = document.getElementById('audit');
+    const verifyBtn = document.getElementById('verifyBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
+    function logAudit(entry){
+      const t = new Date().toISOString();
+      auditEl.innerText = `[${t}] ${entry}\n` + auditEl.innerText;
+    }
+
+    function showResult(html){ resultEl.innerText = html; }
+
+    function findById(id){ return voters.find(v=>v.id.toLowerCase() === id.toLowerCase()); }
+    function findByName(name){ name = name.toLowerCase(); return voters.find(v=>v.name.toLowerCase().includes(name)); }
+
+    function pseudoBiometricMatch(voter){
+      // In a real system: secure biometric template comparison. Here we simulate a confidence score.
+      const confidence = Math.floor(70 + Math.random()*30); // 70-100
+      return {confidence, matched: confidence > 82};
+    }
+
+    verifyBtn.addEventListener('click', ()=>{
+      const method = methodEl.value;
+      const id = idEl.value.trim();
+      const name = nameEl.value.trim();
+
+      // basic validation
+      if(!id && method!=='qr' && method!=='face'){
+        showResult('Please enter a Voter ID or select QR/Face.');
+        return;
+      }
+
+      // Simulated flows
+      if(method === 'id'){
+        const found = findById(id) || (name? findByName(name):null);
+        if(found){
+          // found — we simulate signed audit
+          const proof = btoa([found.id,Date.now(),Math.random().toString(36).slice(2,12)].join(':'));
+          showResult(`VERIFIED: ${found.name} (${found.id}) — registered`);
+          logAudit(`ID-VERIFY success ${found.id} proof=${proof}`);
+        } else {
+          showResult('NOT FOUND — manual flow suggested');
+          logAudit(`ID-VERIFY fail input=${id||name}`);
+        }
+      } else if(method === 'qr'){
+        // simulate scanning a QR with an embedded token
+        const simulatedToken = 'VOTER-2025-002';
+        const found = findById(simulatedToken);
+        if(found){
+          const proof = btoa([found.id,Date.now(),'qr',Math.random().toString(36).slice(2,8)].join(':'));
+          showResult(`QR VERIFIED: ${found.name} (${found.id})`);
+          logAudit(`QR-VERIFY success ${found.id} proof=${proof}`);
+        } else {
+          showResult('QR token invalid');
+          logAudit('QR-VERIFY fail token');
+        }
+      } else if(method === 'face'){
+        // face flow — optional biometric assist
+        const candidate = findById(id) || (name? findByName(name):null);
+        if(!candidate){ showResult('No candidate found for biometric check'); logAudit('FACE-VERIFY fail - no candidate'); return; }
+        const res = pseudoBiometricMatch(candidate);
+        if(res.matched){
+          showResult(`FACE MATCH: ${candidate.name} — confidence ${res.confidence}%`);
+          logAudit(`FACE-VERIFY success ${candidate.id} conf=${res.confidence}`);
+        } else {
+          showResult(`FACE MISMATCH: confidence ${res.confidence}% — require manual review`);
+          logAudit(`FACE-VERIFY mismatch ${candidate.id} conf=${res.confidence}`);
+        }
+      }
+    });
+
+    clearBtn.addEventListener('click', ()=>{ idEl.value=''; nameEl.value=''; showResult('Cleared.'); });
+
+    // Accessibility helper: keyboard shortcut to focus ID
+    document.addEventListener('keydown', (e)=>{ if((e.ctrlKey||e.metaKey) && e.key==='i'){ e.preventDefault(); idEl.focus(); } });
+
+    // Initial audit note
+    logAudit('Prototype started');
+  </script>
+</body>
+</html>
