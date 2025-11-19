@@ -1,0 +1,45 @@
+import tkinter as tk
+from tkinter import messagebox
+
+def verify_voter():
+    voter_id = entry_id.get()
+    biometrics = entry_bio.get()
+
+    # Placeholder for actual verification logic,
+    # including interfacing with secure backend systems
+    if voter_id == "VALID1234" and biometrics == "MATCH":
+        messagebox.showinfo("Verification", "Voter verified! Proceed to vote.")
+    else:
+        messagebox.showerror("Verification Failed", "Verification failed. Please try again or seek help.")
+
+def reset_fields():
+    entry_id.delete(0, tk.END)
+    entry_bio.delete(0, tk.END)
+
+app = tk.Tk()
+app.title("Automated Voter Verification System")
+app.geometry("400x300")
+
+label_title = tk.Label(app, text="Welcome to Secure Polling Booth", font=('Arial', 16))
+label_title.pack(pady=10)
+
+label_id = tk.Label(app, text="Enter Voter ID:")
+label_id.pack()
+entry_id = tk.Entry(app)
+entry_id.pack(pady=5)
+
+label_bio = tk.Label(app, text="Enter Biometrics (sample):")
+label_bio.pack()
+entry_bio = tk.Entry(app, show="*")
+entry_bio.pack(pady=5)
+
+verify_btn = tk.Button(app, text="Verify", command=verify_voter)
+verify_btn.pack(pady=10)
+
+reset_btn = tk.Button(app, text="Reset", command=reset_fields)
+reset_btn.pack(pady=2)
+
+label_status = tk.Label(app, text="", fg="green")
+label_status.pack(pady=10)
+
+app.mainloop()
